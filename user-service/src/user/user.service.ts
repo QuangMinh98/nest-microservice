@@ -3,6 +3,7 @@ import { Inject, Injectable } from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { IUserRepository } from './interfaces/IUserRepository';
+import { TCreateUserPayload, TUpdateUserPayload } from './types';
 
 @Injectable()
 export class UserService {
@@ -10,11 +11,11 @@ export class UserService {
     @Inject(IUserRepository) private userRepository: IUserRepository,
   ) {}
 
-  create(createUserDto: CreateUserDto) {
+  create(payload: TCreateUserPayload) {
     return this.userRepository.create({
-      name: createUserDto.name,
-      email: createUserDto.email,
-      password: createUserDto.password,
+      name: payload.name,
+      email: payload.email,
+      password: payload.password,
     });
   }
 
@@ -30,11 +31,11 @@ export class UserService {
     return this.userRepository.getByEmail(email);
   }
 
-  update(id: number, updateUserDto: UpdateUserDto) {
+  update(id: string, payload: TUpdateUserPayload) {
     return `This action updates a #${id} user`;
   }
 
-  remove(id: number) {
+  remove(id: string) {
     return `This action removes a #${id} user`;
   }
 }

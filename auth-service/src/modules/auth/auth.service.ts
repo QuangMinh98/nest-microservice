@@ -1,22 +1,25 @@
 import { BadRequestException, Inject, Injectable } from '@nestjs/common';
-import { LoginDto } from './dto/login.dto';
 import { comparePassword, hashPassword } from 'src/utils';
 import { JwtService } from '@nestjs/jwt';
 import { UserEntity } from '../user/entities/user.entity';
 import { IUserRepository } from '../user/interfaces/IUserRepository';
-import { TRegisterPayload } from './types';
+import { TLoginPayload, TRegisterPayload } from './types';
+import { IAuthService } from './interfaces/IAuthService';
 
 @Injectable()
-export class AuthService {
+export class AuthService implements IAuthService {
   constructor(
     @Inject(IUserRepository) private readonly userRepository: IUserRepository,
     private readonly jwtService: JwtService,
   ) {}
 
-  async login({ email, password }: LoginDto) {
+  async login({ email, password }: TLoginPayload) {
     const user = await this.userRepository.getByEmail(email);
     if (!user) {
-      throw new BadRequestException('Invalid email or password');
+      throw new BadRequestException({
+        code: 400,
+        message: 'Invalid email or password',
+      });
     }
 
     const isValid = comparePassword(user.password, password);

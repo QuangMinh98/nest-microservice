@@ -5,6 +5,7 @@ import { MongooseModule } from '@nestjs/mongoose';
 import { User, UserSchema } from './schema/user';
 import { UserRepository } from './user.repository';
 import { IUserRepository } from './interfaces/IUserRepository';
+import { IUserService } from './interfaces/IUserService';
 
 @Module({
   imports: [
@@ -17,10 +18,13 @@ import { IUserRepository } from './interfaces/IUserRepository';
   ],
   controllers: [UserController],
   providers: [
-    UserService,
     {
       provide: IUserRepository,
       useClass: UserRepository,
+    },
+    {
+      provide: IUserService,
+      useClass: UserService,
     },
   ],
 })

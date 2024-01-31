@@ -11,3 +11,8 @@ export type TRegisterPayload = {
   email: string;
   password: string;
 };
+
+export type TLoginPayload = {
+  email: string;
+  password: string;
+};
