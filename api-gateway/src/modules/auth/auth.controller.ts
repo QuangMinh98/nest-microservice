@@ -1,6 +1,7 @@
 import { Body, Controller, Inject, OnModuleInit, Post } from '@nestjs/common';
 import { ClientKafka } from '@nestjs/microservices';
 import { LoginDto } from './dto/login.dto';
+import { RegisterDto } from './dto/register.dto';
 
 @Controller('auth')
 export class AuthController implements OnModuleInit {
@@ -14,8 +15,8 @@ export class AuthController implements OnModuleInit {
   }
 
   @Post('register')
-  register(@Body() registerDto: any) {
-    return this.client.send('register', registerDto);
+  register(@Body() registerDto: RegisterDto) {
+    return this.client.send('register', { ...registerDto });
   }
 
   async onModuleInit() {
